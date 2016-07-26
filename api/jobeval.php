@@ -1,10 +1,8 @@
 <?php
-
     $pagination = false;
     if ( isset($_REQUEST["page"]) )
     {
         $pagination = true;
-
         $page = intval($_REQUEST["page"]);
         $perpage = intval($_REQUEST["perpage"]);
     }
@@ -15,7 +13,6 @@
     $sorton = $_REQUEST["sorton"];
     $sortby = $_REQUEST["sortby"];
 
-    //$mypdo = new PDO("mysql:host=mysql2.000webhost.com;dbname=a4917957_test", "a4917957_test", "test0php");
     $mypdo = new PDO("mysql:host=138.68.10.225;dbname=jobeval","nicks","jobeval0");
 
     $n = ( $page -1 ) * $perpage;
@@ -28,24 +25,22 @@
     if ( $pagination )
         $limit = "LIMIT $n, $perpage";
 
-    $result = $mypdo->query("SELECT email, nick, 'detail' as detail FROM Nicks");
-
-    $sql = 'SELECT * FROM NickContacts WHERE email = :email';
-    $child = $mypdo->prepare($sql);
+    $master = $mypdo->query("SELECT email, nick, 'detail' as detail FROM Nicks");
+    $child_prep = $mypdo->prepare('SELECT * FROM NickContacts WHERE email = :email');
 
     $ret = array();
-    while ($row = $result->fetchObject()) {
-      $email = $row->email;
-      $child->bindParam(':email', $email, PDO::PARAM_STR, 100);
-      $child->execute();
-      $row->detail = $child->fetchAll(PDO::FETCH_OBJ);
-      array_push($ret, $row);
+    while ($nick = $master->fetchObject()) {
+      $email = $nick->email;
+      $child_prep->bindParam(':email', $email, PDO::PARAM_STR, 100);
+      $child_prep->execute();
+      $nick->detail = $child_prep->fetchAll(PDO::FETCH_OBJ);
+      array_push($ret, $nick);
     }
 
     $ret = array("page"=>$page, "total"=>$total, "data"=>$ret);
-
     echo json_encode($ret);
 
-    $result = null;
+    $child_prep = null;
+    $master = null;
     $mypdo = null;
 ?>	
