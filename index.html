@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 </head>
 <body>
-<link rel="stylesheet" media="screen" href="./index_files/omnigrid.css" type="text/css">
-<script type="text/javascript" src="./index_files/mootools-core-1.6.0.js"></script>
-<script type="text/javascript" src="./index_files/mootools-more-1.6.0.js"></script>
-<script type="text/javascript" src="./index_files/omnigrid.js"></script>
+<link rel="stylesheet" media="screen" href="omnigrid/omnigrid.css" type="text/css">
+<script type="text/javascript" src="mootools/mootools-core-1.6.0.js"></script>
+<script type="text/javascript" src="mootools/mootools-more-1.6.0.js"></script>
+<script type="text/javascript" src="omnigrid/omnigrid.js"></script>
 
 <script type="text/javascript">
 
@@ -74,7 +74,7 @@
             {
                header: "Nick",
                dataIndex: 'nick',
-               dataType:'string'
+               dataType:'string',
                editable:true
             },
             {
@@ -94,7 +94,7 @@
               {separator: true},
               {name: 'Duplicate', bclass: 'duplicate', onclick : gridButtonClick}
             ],
-            url:"api/jobeval.php",
+            url:"api/Namesbook.php",
             perPageOptions: [10,20,50,100,200],
             perPage:10,
             page:1,
