@@ -4,6 +4,22 @@ namespace jobeval;
 
 use PDO;
 
+class Nickdetails
+{
+    private $details;
+
+    public function __construct($details)
+    {
+        $this->details = details;
+    }
+
+    function static loadData($param)
+    {
+//        return json_encode(array("kind"=>"handy", "contact"=>"+31"));
+        return $param;
+    }
+}
+
 /**
  * Namesbook for job apply test avaliation
  * @author Evandro Jose Graton
@@ -51,7 +67,7 @@ class Namesbook
           $email = $nick->email;
           $child_prep->bindParam(':email', $email, PDO::PARAM_STR, 100);
           $child_prep->execute();
-          $nick->detail = $child_prep->fetchAll(PDO::FETCH_OBJ);
+          $nick->detail = new Nickdetails($child_prep->fetchAll(PDO::FETCH_OBJ));
           array_push($this->ret, $nick);
         }
 
