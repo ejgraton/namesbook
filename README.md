@@ -23,7 +23,7 @@ Github ( https://github.com/ejgraton/namesbook )
 
 PHP + JS
 -back-end: Namesbook class implemented to management the data flow
--front-end: based over omnigrid and mootools fraworks
+-front-end: based over omnigrid and mootools frameworks
 
 See also:
 
