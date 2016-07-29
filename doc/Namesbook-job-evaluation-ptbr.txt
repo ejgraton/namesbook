@@ -1,11 +1,11 @@
-Medidas de seguraça:
+Medidas de segurança:
 -desabilitado acesso ao root por meio de password nome+senha
 -ativado acesso remoto por meio de par de chaves ssh (privada + publica)
 
 Github
--carregado arcevo incial
+-carregado arcevo inicial
 -criado branche para experimentações
--realizado merge a medida que estabalizava
+-realizado merge à medida que estabalizava
 -usando svn para registro das alteracoes, feitas em computador pessoal
 
 Servidor

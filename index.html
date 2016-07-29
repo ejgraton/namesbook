@@ -3,24 +3,26 @@
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 </head>
 <body>
-<link rel="stylesheet" media="screen" href="omnigrid/omnigrid.css" type="text/css">
-<script type="text/javascript" src="mootools/mootools-core-1.6.0.js"></script>
-<script type="text/javascript" src="mootools/mootools-more-1.6.0.js"></script>
-<script type="text/javascript" src="omnigrid/omnigrid.js"></script>
+
+<link rel="stylesheet" media="screen" href="fw/omnigrid/omnigrid.css" type="text/css">
+<script type="text/javascript" src="fw/mootools/mootools-core-1.6.0.js"></script>
+<script type="text/javascript" src="fw/mootools/mootools-more-1.6.0.js"></script>
+<script type="text/javascript" src="fw/omnigrid/omnigrid.js"></script>
 
 <script type="text/javascript">
-//@Class NickDetailsProvier
-function NickDetailsProvider(strDetail)
-{
-this.detail = JSON.parse(strDetail);
 
-//dataProvider method - suppose details was pre-build in php side
-this.loadData = function(param)
-{
-//first version ignore omnigrid parameter (page, pagination, sorty..)
-return this.detail;
-}
-}
+    //@Class NickDetailsProvier
+    function NickDetailsProvider(strDetail)
+    {
+        this.detail = JSON.parse(strDetail);
+	
+        //dataProvider method - suppose details was pre-build in php side
+        this.loadData = function(param)
+        {
+            //first version ignore omnigrid parameter (page, pagination, sorty..)
+            return this.detail;
+        }
+    }
 
     function onGridSelect(evt)
     {
@@ -41,105 +43,83 @@ return this.detail;
 	    var li;
 	    var iDiv;
 	    var cmu = [
-           {
-            header: "Kind",
-            dataIndex: 'kind',
-            dataType:'string',
-            width:'100',
-            editable:true
-           },
-           {
-            header: "Contact",
-            dataIndex: 'contact',
-            dataType:'string',
-            width:'200',
-            editable:true
-           }];
+            {
+             header: "Kind",
+             dataIndex: 'kind',
+             dataType:'string',
+             width:'100',
+             editable:true
+            },
+            {
+             header: "Contact",
+             dataIndex: 'contact',
+             dataType:'string',
+             width:'200',
+             editable:true
+        }];
 
-		   iDiv = document.createElement('div');
-		   iDiv.id = 'griddetail-' + data.rowdata.nick;
-		   data.parent.appendChild(iDiv);
+		iDiv = document.createElement('div');
+	    iDiv.id = 'griddetail-' + data.rowdata.nick;
+        data.parent.appendChild(iDiv);
 
-           detailgrid = new omniGrid(iDiv.id, {
-			columnModel: cmu,
+        detailgrid = new omniGrid(iDiv.id, 
+        {
+            columnModel: cmu,
 //			buttons : [
-//			  {name: 'Add', bclass: 'add', onclick : gridButtonClick},
-//			  {name: 'Delete', bclass: 'delete', onclick : gridButtonClick}
+//			    {name: 'Add', bclass: 'add', onclick : gridButtonClick},
+//			    {name: 'Delete', bclass: 'delete', onclick : gridButtonClick}
 //			],
 //			url:"api/Namesbook.php",
-//            dataProvider: detailProvider,
-			perPageOptions: [10,20,50,100,200],
-			perPage:10,
-			page:1,
-			editable:true,
-			editondblclick:true,
-			pagination:false,
-			serverSort:true,
-			showHeader: false,
-			alternaterows: false,
-			sortHeader:false,
-			resizeColumns:true,
-			multipleSelection:false,
-			accordion:false,
-			//accordionRenderer:accordionFcn, //accordionFunction,
-			autoSectionToggle:false,
-			openAccordionOnDblClick:false,
-			showtoggleicon:false,
-			width:'100%',
-			height:'100%'
-		});
+//          dataProvider: detailProvider,
+            perPageOptions: [10,20,50,100,200],
+            perPage:10,
+            page:1,
+            editable:true,
+            editondblclick:true,
+            pagination:false,
+            serverSort:true,
+            showHeader: data.row==0,
+            alternaterows: false,
+            sortHeader:false,
+            resizeColumns:true,
+            selectable:false,
+            multipleSelection:false,
+            accordion:false,
+            autoSectionToggle:false,
+            openAccordionOnDblClick:false,
+            showtoggleicon:false,
+            width:'100%',
+            height:'100%'
+        });  
 
-detailgrid.setOptions(detailgrid.getDefaultOptions(), {
-perPageOptions: [10,20,50,100,200],
-perPage:10,
-page:1,
-editable:true,
-editondblclick:true,
-pagination:false,
-serverSort:true,
-showHeader: false,
-alternaterows: false,
-sortHeader:false,
-resizeColumns:true,
-multipleSelection:false,
-accordion:false,
-//accordionRenderer:accordionFcn, //accordionFunction,
-autoSectionToggle:false,
-openAccordionOnDblClick:false,
-showtoggleicon:false,
-width:'100%',
-height:'100%'
-});
+        detailgrid.setOptions(detailgrid.getDefaultOptions(), 
+        {    
+            perPageOptions: [10,20,50,100,200],
+            perPage:10,
+            page:1,
+            editable:true,
+            editondblclick:true,
+            pagination:false,
+            serverSort:true,
+            showHeader: false,
+            alternaterows: false,
+            sortHeader:data.row==0,
+            resizeColumns:true,
+            selectable:false,
+            multipleSelection:false,
+            accordion:false,
+            autoSectionToggle:false,
+            openAccordionOnDblClick:false,
+            showtoggleicon:false,
+            width:'100%',
+            height:'100%'
+        });
 
-detailgrid.setData(detailProvider.detail);
-
-/*
-	   for(i=0; i<n_contacts; i++) {
-		 li = document.createElement('li');
-		 li.id = 'details-' + data.rowdata.nick;
-		 li.className = 'tr';
-
-		 //type, contact
-		 for(j=0; j<2; j++) {
-		   iDiv = document.createElement('div');
-		   iDiv.id = 'detail-' + j;
-		   iDiv.className = 'td';
-		   iDiv.style.width = "40%";
-		   iDiv.style.height = "20px";
-		   switch(j) {
-			 case 0: iDiv.innerHTML = detail[i].kind;
-			 break;
-			 case 1: iDiv.innerHTML = detail[i].contact;
-			 break;
-		   }
-		   li.appendChild(iDiv);
-		 }
-		 data.parent.appendChild(li);
-	   }
-*/
-	   n_contacts *= 20;
-	   data.parent.style.height = n_contacts.toString() + "px";
-	}
+        detailgrid.setData(detailProvider.detail);
+        n_contacts += data.row==0 ? 3 : 1;
+        n_contacts *= 20;
+        data.parent.style.height = n_contacts + "px";
+	}    
 
 //    function gridButtonClick(button, grid)
 	function gridButtonClick(evt)
@@ -169,9 +149,9 @@ detailgrid.setData(detailProvider.detail);
 			   width:200
 			}];
 
-	window.addEvent("domready", function(){
-
-		datagrid = new omniGrid('mygrid', {
+	window.addEvent("domready", function()
+	{
+        datagrid = new omniGrid('mygrid', {
 			columnModel: cmu,
 			buttons : [
 			  {name: 'Add', bclass: 'add', onclick : gridButtonClick},
@@ -184,7 +164,7 @@ detailgrid.setData(detailProvider.detail);
             perPage:10,
             page:1,
             editable:true,
-//            editondblclick:true,
+            editondblclick:true,
             pagination:true,
             serverSort:true,
             showHeader: true,
@@ -193,14 +173,9 @@ detailgrid.setData(detailProvider.detail);
             resizeColumns:true,
 //            multipleSelection:true,
             multipleSelection:false,
-
-            // uncomment this if you want accordion behavior for every row
-            
             accordion:true,
-            accordionRenderer:accordionFcn, //accordionFunction,
-            
-            autoSectionToggle:false,
-            //
+            accordionRenderer:accordionFcn,            
+            autoSectionToggle:true,
             openAccordionOnDblClick:false,
             showtoggleicon:true,
             width:600,
@@ -208,6 +183,7 @@ detailgrid.setData(detailProvider.detail);
         });
 
         datagrid.addEvent('click', onGridSelect);
+        
         var bt = document.getElementsByClassName("add");
         if(bt) bt[0].addEventListener('click', gridButtonClick);
 		bt = document.getElementsByClassName("delete");
@@ -215,7 +191,6 @@ detailgrid.setData(detailProvider.detail);
         bt = document.getElementsByClassName("duplicate");
         if(bt) bt[0].addEventListener('click', gridButtonClick);
         
-
      });
 </script>
 
