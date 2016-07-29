@@ -44,13 +44,21 @@ class Namesbook
         if ( $this->pagination )
             $limit = "LIMIT $n, $perpage";
 
-        $master = $mypdo->query("SELECT email, nick, 'detail' as detail FROM Nicks");
-        $child_prep = $mypdo->prepare('SELECT * FROM NickContacts WHERE email = :email');
-
+        $stmtNicks = 'SELECT email, nick, detail FROM ('.
+                     '       SELECT 0 as ord, \'(...)\' as email, \'(...)\' as nick, \'detail\' as detail'.
+                     ' UNION SELECT 1 as ord,       email,       nick, \'detail\' as detail FROM Nicks'.
+                     ') N';
+        $stmtChild = 'SELECT email, kind, contact FROM ('.
+                     '       SELECT \'(...)\' as email , \'...\' as kind , \'...\' as contact'.
+                     ' UNION SELECT * FROM NickContacts) NC WHERE email = :email';
+        
+        $master = $mypdo->query($stmtNicks);
+        $child_prep = $mypdo->prepare($stmtChild);
+        
         while ($nick = $master->fetchObject()) {
             $email = $nick->email;
             $child_prep->bindParam(':email', $email, PDO::PARAM_STR, 100);
-            $child_prep->execute();
+            $child_prep->execute();           
             $nick->detail = $child_prep->fetchAll(PDO::FETCH_OBJ);
             $nick->detail = array("page"=>1, "total"=> count($nick->detail), "data"=>$nick->detail);
      	    $nick->detail = json_encode($nick->detail);

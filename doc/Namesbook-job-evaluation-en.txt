@@ -1,0 +1,24 @@
+Improving the security level
+-disabled server's root acess by simple password (justo with SSH Keys)
+-setup the remote acess by SSH Keys pair (public + private)
+
+Github
+-loaded initial archives
+-created branche for experimentations
+-did merge when the revision is working good
+-use svn to commit local changes, that was made over my personal computer
+
+Linux Server
+-added to cron auto run the checkout namesbook from Github and update web files
+-added to cron auto run PHPUnit tests (with logs management for browse acess and exclude old files)
+-setup LAMP: Linux, Apache2, MySQL and PHP
+-created linux's user with SSH Key to invite others to acess the server
+-created MySQL's user and Database exclusives to project Namesbook 
+
+PHP + JS
+-back-end: Namesbook class implemented to management the data flow
+-front-end: based over omnigrid and mootools fraworkes
+
+App Android (one plus out of the offical tasks)
+-published by my own google play account
+-source avaible in Github
