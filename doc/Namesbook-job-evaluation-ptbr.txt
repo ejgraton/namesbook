@@ -1,12 +1,5 @@
-Medidas de segurança:
--desabilitado acesso ao root por meio de password nome+senha
--ativado acesso remoto por meio de par de chaves ssh (privada + publica)
-
-Github
--carregado arcevo inicial
--criado branche para experimentações
--realizado merge à medida que estabalizava
--usando svn para registro das alteracoes, feitas em computador pessoal
+Veja em funcionamento em: http://138.68.10.225/
+Confira os logs das compilações automatizadas aqui: http://138.68.10.225/api/tests/log/
 
 Servidor
 -incluido no cron rotina de checkout automatica
@@ -15,10 +8,22 @@ Servidor
 -criado usuario para disponibilizar com chave ssh para conceder acesso remoto a convidado
 -criado usuario no MySQL e base de dados
 
+Medidas de segurança:
+-desabilitado acesso ao root por meio de password nome+senha
+-ativado acesso remoto por meio de par de chaves ssh (privada + publica)
+
+Github ( https://github.com/ejgraton/namesbook )
+-carregado arcevo inicial
+-criado branche para experimentações
+-realizado merge à medida que estabalizava
+-usando svn para registro das alteracoes, feitas em computador pessoal
+
 PHP + JS
 -back-end: implementada classe Namesbook.php para gerenciar fluxo de dados
 -front-end: utilizado como base o framework omnigrid e mootools
 
-App Android
--conta própria no google play
--fonte no Github
+Conheça também:
+
+App Android (one plus out of the offical tasks)
+-conta própria no google play: https://play.google.com/store/apps/details?id=br.com.conexaozero.prafrentequeseanda_dce2105ufmg
+-fontes disponíveis no Github: https://github.com/ejgraton/PFA-DCE-UFMG-2015
