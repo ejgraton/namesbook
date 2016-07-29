@@ -2,7 +2,7 @@
 Simple practical test for the job application
 
 See running at: http://138.68.10.225/
-With automated buld's logs here: http://138.68.10.225/api/tests/log/
+With automated build's logs here: http://138.68.10.225/api/tests/log/
 
 Linux Server
 -added to cron auto run the checkout namesbook from Github and update web files
@@ -23,7 +23,7 @@ Github ( https://github.com/ejgraton/namesbook )
 
 PHP + JS
 -back-end: Namesbook class implemented to management the data flow
--front-end: based over omnigrid and mootools fraworkes
+-front-end: based over omnigrid and mootools fraworks
 
 See also:
 
