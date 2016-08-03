@@ -2,6 +2,8 @@
 
 namespace jobeval;
 
+include "Nickname.php";
+
 use PDO;
 
 /**
@@ -10,6 +12,9 @@ use PDO;
  **/
 class Namesbook
 {
+//    $argv;
+//    $argc;
+
     private $pdoconn;
     private $perpage = 0;
     private $pagination = false;
@@ -18,32 +23,67 @@ class Namesbook
     private $ret = array();
     private $action;
 
+    public $hasAction = false;
+    public $actionResult = null;
+
     public function __construct()
     {
         $this->pdoconn = new PDO("mysql:host=138.68.10.225;dbname=jobeval","nicks","jobeval0");
-        
-        if ( isset($_REQUEST["namesBookAction"]) ) {
+      
+        $this->hasAction = isset($_REQUEST["namesBookAction"]);
+        if($this->hasAction)
+        {
             $this->nicknameAction($_REQUEST["namesBookAction"]);
-        } else {
+        } else 
+        {
             $this->fillWithNames();
         }                  
+    }
+    
+    public static function assignREQUEST($argv, $argc)
+    {
+        for($i=1; $i < $argc; $i++)
+        {
+            parse_str($argv[$i], $tmp);
+            $_REQUEST = array_merge($_REQUEST, $tmp);
+        }
+        //print_r($_REQUEST);
     }
 
     protected function nicknameAction($nicknameAction)
     {
-         $data = array("nicknameAction"=>$nicknameAction);
+         $data = array("nicknameAction"=>$nicknameAction,"userData"=>array());
          
-         if ( isset($_REQUEST["newEmail"])) {
-             array_push($data, array("newEmail"=>$_REQUEST["newEmail"]));
-             echo json_econde($data);
-         } if ( isset($_REQUEST["newNickname"])) {
-             array_push($data, array("nicknameAction"=>$_REQUEST["newNickname"]));
-         } if ( isset($_REQUEST["oldEmail"])) {
-             array_push($data, array("oldEmail"=>$_REQUEST["oldEmail"]));
+         foreach($_REQUEST as $itemKey => $itemVal)
+         {
+             switch($itemKey)
+             {
+                 case "newEmail":
+                 case "oldEmail":
+                     $data["userData"]["email"] = $itemVal;
+                     break;
+                 case "newNickname":
+                     $data["userData"]["nick"] = $itemVal;
+                     break;
+                 case "firstName":
+                     $data["userData"]["firstName"] = $itemVal;
+                     break;
+                 case "middleName":
+                     $data["userData"]["middleName"] = $itemVal;
+                     break;
+                 case "lastName":
+                     $data["userData"]["lastName"] = $itemVal;
+                     break;
+                 case "detail":
+                     $data["userData"]["detail"] = $itemVal;
+                     break;
+             }
          }
          
-         new Nickname($this->pdoconn, $data);       
+         $nick = new Nickname($this->pdoconn, json_encode($data));
+         $actionResult = $nick;
     }
+
     protected function fillWithNames()
     {
         if ( isset($_REQUEST["page"]) )
@@ -104,7 +144,12 @@ class Namesbook
     }
 }
 
+if($_SERVER['argc'] > 1) 
+{
+    Namesbook::assignREQUEST($_SERVER['argv'], $_SERVER['argc']);
+}
+
 $nb = new Namesbook;
-echo $nb->allNames();
+echo $nb->hasAction ? $nb->actionResult : $nb->allNames();
 
 ?>

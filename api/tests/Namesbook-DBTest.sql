@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `Nicks` (
   `email` varchar(100) NOT NULL,
   `nick` varchar(100) NOT NULL,
   `firstName` varchar(100) NOT NULL,
-  `midleName` varchar(100) DEFAULT NULL,
+  `middleName` varchar(100) DEFAULT NULL,
   `lastName` varchar(100) NOT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
