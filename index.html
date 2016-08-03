@@ -2,47 +2,41 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 </head>
-<body>
-
+<body>
 <link rel="stylesheet" media="screen" href="fw/omnigrid/omnigrid.css" type="text/css">
 <script type="text/javascript" src="fw/mootools/mootools-core-1.6.0.js"></script>
 <script type="text/javascript" src="fw/mootools/mootools-more-1.6.0.js"></script>
-<script type="text/javascript" src="fw/omnigrid/omnigrid.js"></script>
-
-<script type="text/javascript">
-
+<script type="text/javascript" src="fw/omnigrid/omnigrid.js"></script>
+<script type="text/javascript">
     //@Class NickDetailsProvier
     function NickDetailsProvider(strDetail)
     {
         this.detail = JSON.parse(strDetail);
-	
+    
         //dataProvider method - suppose details was pre-build in php side
         this.loadData = function(param)
         {
             //first version ignore omnigrid parameter (page, pagination, sorty..)
             return this.detail;
         }
-    }
-
+    }
     function onGridSelect(evt)
     {
          var str = 'row: '+evt.row+' indices: '+evt.indices;
 /*
-		 str += ' id: '+evt.target.getDataByRow(evt.row).id;
-
-		 evt.target.editable = true;
-		 alert( str );
+         str += ' id: '+evt.target.getDataByRow(evt.row).id;
+         evt.target.editable = true;
+         alert( str );
 */
-	}
-
+    }
 //at omnigrid.js        this.options.accordionRenderer({parent:li2, row:r, grid:this, rowdata: rowdata});
-	function accordionFcn(data)
-	{
-	    var detailProvider = new NickDetailsProvider(data.rowdata.detail);
-	    var n_contacts = detailProvider.detail.data.length;
-	    var li;
-	    var iDiv;
-	    var cmu = [
+    function accordionFcn(data)
+    {
+        var detailProvider = new NickDetailsProvider(data.rowdata.detail);
+        var n_contacts = detailProvider.detail.data.length;
+        var li;
+        var iDiv;
+        var cmu = [
             {
              header: "Kind",
              dataIndex: 'kind',
@@ -56,20 +50,19 @@
              dataType:'string',
              width:'200',
              editable:true
-        }];
-
-		iDiv = document.createElement('div');
-	    iDiv.id = 'griddetail-' + data.rowdata.nick;
+            }];
+        iDiv = document.createElement('div');
+        iDiv.id = 'griddetail-' + data.rowdata.nick;
         data.parent.appendChild(iDiv);
-
+        
         detailgrid = new omniGrid(iDiv.id, 
         {
             columnModel: cmu,
-//			buttons : [
-//			    {name: 'Add', bclass: 'add', onclick : gridButtonClick},
-//			    {name: 'Delete', bclass: 'delete', onclick : gridButtonClick}
-//			],
-//			url:"api/Namesbook.php",
+//            buttons : [
+//                {name: 'Add', bclass: 'add', onclick : gridButtonClick},
+//                {name: 'Delete', bclass: 'delete', onclick : gridButtonClick}
+//            ],
+//            url:"api/Namesbook.php",
 //          dataProvider: detailProvider,
             perPageOptions: [10,20,50,100,200],
             perPage:10,
@@ -90,8 +83,7 @@
             showtoggleicon:false,
             width:'100%',
             height:'100%'
-        });  
-
+        });  
         detailgrid.setOptions(detailgrid.getDefaultOptions(), 
         {    
             perPageOptions: [10,20,50,100,200],
@@ -113,76 +105,74 @@
             showtoggleicon:false,
             width:'100%',
             height:'100%'
-        });
-
+        });
         detailgrid.setData(detailProvider.detail);
         n_contacts += data.row==0 ? 3 : 1;
         n_contacts *= 20;
         data.parent.style.height = n_contacts + "px";
-	}    
-
+    }    
 //    function gridButtonClick(button, grid)
-	function gridButtonClick(evt)
-	{
-		 alert(evt.target.className);
+    function gridButtonClick(evt)
+    {
+         //alert(evt.target.className);
+         if (!datagrid.options.url)
+             return;
+         
+         var param = {namesBookAction: evt.target.className};               
+         switch(evt.target.className) {
+             case 'add':
+                 param.newNickname = 'test04'; //datagrid.selected.data.rowdata.nick;
+                 param.newEmail = 'email-test4'; //datagrid.selected.data.rowdata.email;
+                 param.firstName = 'test04'; //datagrid.selected.data.rowdata.nick;
+                 param.middleName = 't04'; //datagrid.selected.data.rowdata.email;
+                 param.lastName = 'html'; //datagrid.selected.data.rowdata.nick;
+                 param.detail = ''; //datagrid.selected.data.rowdata.email;
+             break;
+             case 'edit':
+                 param.oldEmail = datagrid.selected.data.rowdata.email;
+                 param.newNickname = datagrid.selected.data.rowdata.nick;
+             break;
 
-		 if (!datagrid.options.url)
-	         return;
+             case 'delete':
+                 param.oldEmail = 'email-test4'; //datagrid.selected.data.rowdata.email;
+             break;
+         }
+         //datagrid.showLoader();
+         var url = datagrid.options.url;
+         var request = new Request.JSON({             url: url,             data: param,             onSuccess: function(actionResult){
+                         datagrid.hideLoader();
+                         if(actionResult)
+                             datagrid.refresh();
+         }});
+         request.addEvent("complete", function(){ datagrid.container.getElement('.bDiv').scrollTop = 0}.bind(datagrid) ) ;         request.addEvent("complete", datagrid.onLoadData.bind(datagrid) ) ;         request.get();         
 
-		 var param = {namesBookAction: evt.target.className};
-	            
-		 switch(evt.target.className) {
-			 case 'add':
-			     param.newNickname = 'test01'; //datagrid.selected.data.rowdata.nick;
-			     param.newEmail = 'email-test'; //datagrid.selected.data.rowdata.email;
-			 break;
-			 case 'delete':
-                param.oldEmail = datagrid.selected.data.rowdata.email;
-			 break;
-			 case 'edit':
-		        param.oldEmail = datagrid.selected.data.rowdata.email;
-	            param.newNickname = datagrid.selected.data.rowdata.nick;
-			 break;
-		 }
-		 
-	     datagrid.showLoader();
- 		 var url = datagrid.options.url;
-		 var request = new Request.JSON({
-		     url: url,
-		     data: param
-		 });
-
-		 request.addEvent("complete", function(){ datagrid.container.getElement('.bDiv').scrollTop = 0}.bind(datagrid) ) ;
-		 request.addEvent("complete", datagrid.onLoadData.bind(datagrid) ) ;
-		 request.get();		 
-	}
-	
-	var cmu = [
-			{
-			   header: "Nick",
-			   dataIndex: 'nick',
-			   dataType:'string',
-			   editable:true
-			},
-			{
-			   header: "email",
-			   dataIndex: 'email',
-			   dataType:'string',
-			   width:200
-			}];
-
-	window.addEvent("domready", function()
-	{
+         datagrid.refresh();
+    }   
+    var cmu = [
+            {
+               header: "Nick",
+               dataIndex: 'nick',
+               dataType:'string',
+               editable:true
+            },
+            {
+               header: "email",
+               dataIndex: 'email',
+               dataType:'string',
+               width:200
+            }];
+    window.addEvent("domready", function()
+    {
         datagrid = new omniGrid('mygrid', {
-			columnModel: cmu,
-			buttons : [
-			  {name: 'Add', bclass: 'add', onclick : gridButtonClick},
-			  {name: 'Delete', bclass: 'delete', onclick : gridButtonClick},
-			  {separator: true},
+            columnModel: cmu,
+            buttons : [
+              {name: 'Add', bclass: 'add', onclick : gridButtonClick},
+              {name: 'Delete', bclass: 'delete', onclick : gridButtonClick},
+              {separator: true},
               {name: 'Edit', bclass: 'edit', onclick : gridButtonClick}
             ],
-			url:"api/Namesbook.php",
-			perPageOptions: [10,20,50,100,200],
+            url:"api/Namesbook.php",
+            perPageOptions: [10,20,50,100,200],
             perPage:10,
             page:1,
             editable:true,
@@ -202,21 +192,20 @@
             showtoggleicon:true,
             width:600,
             height: 400
-        });
-
-        datagrid.addEvent('click', onGridSelect);
-        
+        });
+        datagrid.addEvent('click', onGridSelect);      
         var bt = document.getElementsByClassName("add");
         if(bt) bt[0].addEventListener('click', gridButtonClick);
-		bt = document.getElementsByClassName("delete");
+
+        bt = document.getElementsByClassName("delete");
         if(bt) bt[0].addEventListener('click', gridButtonClick);
+
         bt = document.getElementsByClassName("edit");
-        if(bt) bt[0].addEventListener('click', gridButtonClick);
-        
+        if(bt) bt[0].addEventListener('click', gridButtonClick);        
      });
+    
 </script>
 
 <div id="mygrid" ></div>
-
 </body>
-</html>
+</html>

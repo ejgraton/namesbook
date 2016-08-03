@@ -2,46 +2,74 @@
 
 namespace jobeval;
 
+use PDO;
+
 /**
  * Nickname integrate the job apply test evalution
  * @author Evandro Jose Graton
  **/
 class Nickname
 {
-    private $podconn;
+    private $pdoconn;
+    //User attributes
     private $email;
     private $nick;
-    private $detail = array();
+    private $firstName;
+    private $middleName;
+    private $lastName;
+    private $detail; //NickContacts pointer
 
-    public function __construct($pdoconn,$data)
+    public function __construct($pdoconn, $jdata)
     {
+        echo "\nreceived:".$jdata;
         $this->pdoconn = $pdoconn;
-        $this->email = $data->email;
-        $this->nick = $data->nick;
+
+        $actionData = json_decode($jdata, true);
+        $this->assignUserData($actionData["userData"]);
+
         //TODO implement NickContacts to manipulate details
-        $this->detail = $data->detail;
       
-        switch ($data.nameBooksAction) 
+        switch ($actionData["nicknameAction"]) 
         {
-            case 'add':
+            case "add":
                 $this->doAdd();
                 break;
-            case 'edit':
+            case "edit":
                 $this->doEdit();
-                break;              
-            case 'delete':
+                break;
+            case "delete":
                 $this->doHarakiri();
-                break;              
+                break;
         }
+    }
+   
+    private function assignUserData($userData)
+    {
+        $this->email = $userData["email"];
+        $this->nick = $userData["nick"];
+        $this->firstName = $userData["firstName"];
+        $this->middleName = $userData["middleName"];
+        $this->lastName = $userData["lastName"];
+        $this->detail = $userData["detail"];
     }
 
     protected function doAdd()
     {
-         $stmt = 'INSERT INTO nicks VALUES (:email, :nick)';
-         $prep_Insert = $pdoconn->prepare($stmt);
-         $prep_Insert->bindParam(':email', $this->email, PDO::PARAM_STR, 100);
-         $prep_Insert->bindParam(':nick', $this->nick, PDO::PARAM_STR, 100);
-         $prep_Insert->execute();
+         $stmt = 'INSERT INTO Nicks VALUES (:email, :nick, :firstName, :middleName, :lastName)';
+         try
+         {
+             $prep_Insert = $this->pdoconn->prepare($stmt);
+             $prep_Insert->bindParam(':email', $this->email, PDO::PARAM_STR, 100);
+             $prep_Insert->bindParam(':nick', $this->nick, PDO::PARAM_STR, 100);
+             $prep_Insert->bindParam(':firstName', $this->firstName, PDO::PARAM_STR, 100);
+             $prep_Insert->bindParam(':middleName', $this->middleName, PDO::PARAM_STR, 100);
+             $prep_Insert->bindParam(':lastName', $this->lastName, PDO::PARAM_STR, 100);
+             $insResult = $prep_Insert->execute();
+         }
+         catch(PDOException $e)
+         {
+             echo 'Insert exception:' . $e->getMessage();
+         }
          $prep_Insert = null;
     }
     

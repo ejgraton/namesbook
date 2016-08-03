@@ -12,6 +12,6 @@ class NamesbookTest extends \PHPUNIT_Framework_TestCase
     {
         $nb = new job\Namesbook();
         // Assert
-        $this->assertNotEmpty("", $nb->allNames());
+        $this->assertNotEmpty($nb->allNames());
     }
 }
