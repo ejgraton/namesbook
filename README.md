@@ -1,9 +1,6 @@
 # namesbook
 Simple practical test for the job application
 
-See running at: http://138.68.10.225/
-With automated build's logs here: http://138.68.10.225/api/tests/log/
-
 Linux Server
 -added to cron auto run the checkout namesbook from Github and update web files
 -added to cron auto run PHPUnit tests (with logs management for browse acess and exclude old files)
